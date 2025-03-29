@@ -16,10 +16,10 @@ const ingredientSchema = zod.object({
   neededForDishes: zod.array(zod.string()),
 });
 
-const ingredientListSchema = zod.array({
+const ingredientListSchema = zod.array(zod.object({
   ingredients: zod.array(ingredientSchema),
   weekNumber: zod.number(),
-});
+}));
 
 const mealsSchema = zod.array(mealSchema);
 
@@ -29,7 +29,14 @@ const mealPlanSchema = zod.array(zod.object({
   weekNumber: zod.number(),
 }));
 
-const responseObject = zodResponseFormat(zod.object({ mealPlan: mealPlanSchema, meals: mealsSchema, ingredients: ingredientListSchema }), "meals");
+const responseObject = zodResponseFormat(
+  zod.object({
+    mealPlan: mealPlanSchema,
+    meals: mealsSchema,
+    ingredients: ingredientListSchema
+  }),
+  "mealPlanner"
+);
 
 function generateMealsPrompt(excludeItems) {
   const prompt = `
@@ -46,7 +53,7 @@ function generateMealsPrompt(excludeItems) {
 
   Something like aloo paratha may not need any additional dish, but something like rice needs a curry and a poriyal.
 
-  First brainstorm and come up with 20 meal options.
+  First brainstorm and come up with AT LEAST 20 meal options.
   strictly exclude any meal that requires the following items : ${excludeItems.join(", ")}
   for main course, stick to rice items or roti / aloo paratha. Do not suggest chole, naan, kulcha, bread / paav based items etc.
   DO NOT SUGGEST BIRIYANI.
