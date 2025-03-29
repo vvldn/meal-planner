@@ -1,7 +1,8 @@
 const generateMealService = require('./services/generate_items');
 const openAiSupport = require('./support/openai');
-
+const {getGoogleSheetClient} = require('./support/google_workspace/google_sheet');
 const fs = require('fs');
+
 
 async function main() {
   const itemsToExclude = [
