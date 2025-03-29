@@ -22,15 +22,11 @@ async function main() {
   const prompt = generateMealService.prompt(itemsToExclude);
   const response = await openAiSupport.getPromptResponse(prompt, generateMealService.responseFormat);
   fs.writeFileSync('response.json', JSON.stringify(response, null, 2));
-  console.log('response written to response.json');
-}
-
-async function test() {
-  const response = JSON.parse(fs.readFileSync('response.json', 'utf8'));
-  await syncMealPlan(response.mealPlan);
-  await syncMeals(response.meals);
-  await syncIngredients(response.ingredients.ingredients);
+  const { mealPlan, meals, ingredients } = response;
+  await syncMealPlan(mealPlan);
+  await syncMeals(meals);
+  await syncIngredients(ingredients);
   console.log('meal plan synced to sheet');
 }
 
-test();
+main();

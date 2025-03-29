@@ -20,12 +20,14 @@ async function syncMeals(meals) {
   await writeResponseToSheet(rows, process.env.SHEET_ID, 'Meals');
 }
 
-async function syncIngredients(ingredients) {
+async function syncIngredients(ingredientsPerWeekList) {
   const rows = [
-    ['Ingredient Name', 'Quantity', 'Shelf Life', 'Needed For Dishes']
+    ['Week Number', 'Ingredient Name', 'Quantity', 'Shelf Life', 'Needed For Dishes']
   ];
-  for (const ingredient of ingredients) {
-    rows.push([ingredient.name, `${ingredient.quantity} ${ingredient.unit}`, ingredient.shelfLife, ingredient.neededForDishes.join(', ')]);
+  for (const ingredientsPerWeek of ingredientsPerWeekList) { 
+    for (const ingredient of ingredientsPerWeek.ingredients) {
+      rows.push([ingredientsPerWeek.weekNumber, ingredient.name, `${ingredient.quantity} ${ingredient.unit}`, ingredient.shelfLife, ingredient.neededForDishes.join(', ')]);
+    }
   }
   await writeResponseToSheet(rows, process.env.SHEET_ID, 'Ingredients');
 }

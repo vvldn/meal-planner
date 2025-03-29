@@ -16,7 +16,7 @@ const ingredientSchema = zod.object({
   neededForDishes: zod.array(zod.string()),
 });
 
-const ingredientListSchema = zod.object({
+const ingredientListSchema = zod.array({
   ingredients: zod.array(ingredientSchema),
   weekNumber: zod.number(),
 });
@@ -56,7 +56,7 @@ function generateMealsPrompt(excludeItems) {
   In response, provide all the meals you've thought of, the meal plan for each week for two weeks, and the ingredients to be purchased each week.
 
   Things to ensure:
-  All the ingredients are to be listed in the ingredients array.
+  All the ingredients are to be listed in the ingredients array, and ensure that all ingredients for a specific week are listed in the ingredients array.
   Ingredients like oil, salt, chilli, mustard seed, turmeric powder etc can be omitted.
   `;
   return prompt;
