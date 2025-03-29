@@ -68,6 +68,21 @@ async function getGoogleSheetClient() {
   return google.sheets({version: 'v4', auth });
 }
 
+
+async function writeResponseToSheet(valuesAsATable, sheetId, sheetName) {
+  const client = await getGoogleSheetClient();
+  const res = await client.spreadsheets.values.update({
+    spreadsheetId: sheetId,
+    range: `${sheetName || 'Sheet1'}!A1`,
+    valueInputOption: 'USER_ENTERED',
+    requestBody: {
+      values: valuesAsATable,
+    },
+  });
+  return res;
+}
+
 module.exports = {
   getGoogleSheetClient,
+  writeResponseToSheet,
 };

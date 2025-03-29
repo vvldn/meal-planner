@@ -1,8 +1,10 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const generateMealService = require('./services/generate_items');
 const openAiSupport = require('./support/openai');
-const {getGoogleSheetClient} = require('./support/google_workspace/google_sheet');
+const {syncMealPlan, syncMeals, syncIngredients} = require('./support/interactions/cookbook_and_items_sync');
 const fs = require('fs');
-
 
 async function main() {
   const itemsToExclude = [
@@ -23,4 +25,12 @@ async function main() {
   console.log('response written to response.json');
 }
 
-main();
+async function test() {
+  const response = JSON.parse(fs.readFileSync('response.json', 'utf8'));
+  await syncMealPlan(response.mealPlan);
+  await syncMeals(response.meals);
+  await syncIngredients(response.ingredients.ingredients);
+  console.log('meal plan synced to sheet');
+}
+
+test();

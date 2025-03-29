@@ -5,7 +5,7 @@ const { zodResponseFormat } = require("openai/helpers/zod");
 const mealSchema = zod.object({
   mealName: zod.string(),
   ingredients: zod.array(zod.string()),
-  dishes: zod.array(zod.object({ dishName: zod.string(), dishType: zod.enum(["main", "side", "optional"])}))
+  dishes: zod.array(zod.string())
 });
 
 const ingredientSchema = zod.object({
@@ -45,7 +45,6 @@ function generateMealsPrompt(excludeItems) {
   Consider the fact that each meal can have multiple dishes.
 
   Something like aloo paratha may not need any additional dish, but something like rice needs a curry and a poriyal.
-  each dish can be of type main, side or optional.
 
   First brainstorm and come up with 20 meal options.
   strictly exclude any meal that requires the following items : ${excludeItems.join(", ")}
